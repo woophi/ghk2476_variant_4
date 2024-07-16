@@ -9,7 +9,9 @@ import img3 from './assets/p3.png';
 import img4 from './assets/p4.png';
 import img5 from './assets/p5.png';
 import img6 from './assets/p6.png';
+import { LS, LSKeys } from './ls';
 import { appSt } from './style.css';
+import { ThxLayout } from './thx/ThxLayout';
 import { sendDataToGA } from './utils/events';
 
 const boxes: { imgSrc: string; title: string; title2: string; subtitle: string; value: string }[] = [
@@ -61,6 +63,7 @@ export const App = () => {
   const [checkedBox, setChecked] = useState('');
   const [loading, setLoading] = useState(false);
   const [err, setError] = useState('');
+  const [thxShow, setThx] = useState(LS.getItem(LSKeys.ShowThx, false));
 
   const submit = useCallback(() => {
     if (!checkedBox) {
@@ -69,9 +72,9 @@ export const App = () => {
     }
     setLoading(true);
     sendDataToGA(checkedBox).then(() => {
+      LS.setItem(LSKeys.ShowThx, true);
       setLoading(false);
-
-      (window.location as unknown as string) = 'alfabank://longread?endpoint=v1/adviser/longreads/15892';
+      setThx(true);
     });
   }, [checkedBox]);
 
@@ -79,6 +82,10 @@ export const App = () => {
     setError('');
     setChecked(v);
   }, []);
+
+  if (!thxShow) {
+    return <ThxLayout />;
+  }
 
   return (
     <>
