@@ -83,7 +83,7 @@ export const App = () => {
     setChecked(v);
   }, []);
 
-  if (!thxShow) {
+  if (thxShow) {
     return <ThxLayout />;
   }
 
